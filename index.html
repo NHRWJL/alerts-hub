@@ -2,90 +2,133 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Alerts Hub</title>
+  <title>Alerts Hub Docs</title>
   <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; }
-    header { position: fixed; top: 0; width: 100%; background: #111; padding: 15px; text-align: center; z-index: 1000; }
-    header a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
-    section { padding: 100px 20px; min-height: 100vh; }
-    h2 { margin-top: 0; }
-    html { scroll-behavior: smooth; }
-    .lang { margin-top: 50px; font-size: 14px; color: #666; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+    /* Sidebar */
+    nav {
+      width: 220px;
+      background: #1e1e1e;
+      color: #fff;
+      height: 100%;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    nav h2 {
+      font-size: 18px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    nav a {
+      display: block;
+      color: #ddd;
+      text-decoration: none;
+      padding: 5px 0 5px 15px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    nav a:hover {
+      color: #fff;
+    }
+
+    /* Content */
+    main {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+    main h1, main h2 {
+      margin-top: 0;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <a href="#discord">Discord</a>
-    <a href="#telegram">Telegram</a>
-    <a href="#english">English</a>
-  </header>
+  <!-- Sidebar -->
+  <nav>
+    <h2>Main</h2>
+    <a onclick="showContent('main')">About</a>
 
-  <section id="discord">
-    <h2>🔵 Discord</h2>
-    <p><a href="https://discord.gg/8YB5FCWJ" target="_blank">Присоединиться в Discord</a></p>
-    <ol>
-      <li>В канале <b>#welcome</b> нажмите <b>Register</b> — бот напишет вам в ЛС.</li>
-      <li>Выберите язык (можно сменить командой <code>/change_language</code>).</li>
-      <li>Зарегистрируйтесь на сайте через нашу <b>реферальную ссылку</b> или введите <b>код</b>.</li>
-      <li>Используйте <code>/choose_site</code> и выберите сайт.</li>
-      <li>Через ~1 минуту бот подтвердит верификацию и даст доступ к каналу.</li>
-    </ol>
-    <p><b>Прочие настройки:</b></p>
-    <ul>
-      <li>Фильтр уведомлений (например, только рейны > 500).</li>
-      <li><code>/statistics</code> — статус привязанных сайтов.</li>
-    </ul>
-  </section>
+    <h2>RU</h2>
+    <a onclick="showContent('ru-discord')">Discord</a>
+    <a onclick="showContent('ru-telegram')">Telegram</a>
 
-  <section id="telegram">
-    <h2>🔷 Telegram</h2>
-    <p><a href="https://t.me/rainshub" target="_blank">Перейти в Telegram</a></p>
-    <ol>
-      <li>Отправьте <b>/start</b> и выберите язык.</li>
-      <li>Зарегистрируйтесь на сайте через нашу <b>реферальную ссылку</b> или введите <b>код</b>.</li>
-      <li>В боте нажмите <b>Choose site</b>, выберите сайт и привяжите Steam-профиль.</li>
-      <li>После верификации бот пришлёт ссылку на группу.</li>
-    </ol>
-    <p><b>Прочие настройки:</b></p>
-    <ul>
-      <li>Фильтр уведомлений (рейны > 500).</li>
-      <li><code>/statistics</code> — статус привязанных сайтов.</li>
-    </ul>
-  </section>
+    <h2>EN</h2>
+    <a onclick="showContent('en-discord')">Discord</a>
+    <a onclick="showContent('en-telegram')">Telegram</a>
+  </nav>
 
-  <section id="english">
-    <h2>🌍 English version</h2>
+  <!-- Content -->
+  <main id="content">
+    <h1>Alerts Hub</h1>
+    <p>
+      Добро пожаловать в <b>Alerts Hub</b> 🎉  
+      Здесь вы можете подключить уведомления о "рейнах" через <b>Discord</b> или <b>Telegram</b>.  
+      Выберите нужный раздел в меню слева.
+    </p>
+  </main>
 
-    <h3>🔵 Discord</h3>
-    <p><a href="https://discord.gg/8YB5FCWJ" target="_blank">Join Discord</a></p>
-    <ol>
-      <li>In <b>#welcome</b>, click <b>Register</b> — the bot will DM you.</li>
-      <li>Select language (change anytime with <code>/change_language</code>).</li>
-      <li>Register via our <b>referral link</b> or enter <b>code</b>.</li>
-      <li>Use <code>/choose_site</code> and pick a site.</li>
-      <li>After ~1 min, bot confirms and unlocks channel.</li>
-    </ol>
-    <p><b>Extra settings:</b></p>
-    <ul>
-      <li>Filter notifications (only rains > 500).</li>
-      <li><code>/statistics</code> — linked sites status.</li>
-    </ul>
+  <script>
+    const pages = {
+      "main": `
+        <h1>Alerts Hub</h1>
+        <p>
+          Добро пожаловать в <b>Alerts Hub</b> 🎉<br>
+          Здесь вы можете подключить уведомления о "рейнах" через <b>Discord</b> или <b>Telegram</b>.<br>
+          Выберите нужный раздел в меню слева.
+        </p>
+      `,
+      "ru-discord": `
+        <h2>🇷🇺 RU — Discord</h2>
+        <p><a href="https://discord.gg/8YB5FCWJ" target="_blank">Присоединиться в Discord</a></p>
+        <ol>
+          <li>В канале <b>#welcome</b> нажмите <b>Register</b>.</li>
+          <li>Выберите язык (<code>/change_language</code>).</li>
+          <li>Зарегистрируйтесь через реферальную ссылку или код.</li>
+          <li>Введите <code>/choose_site</code> и выберите сайт.</li>
+          <li>Через ~1 минуту бот подтвердит аккаунт.</li>
+        </ol>
+      `,
+      "ru-telegram": `
+        <h2>🇷🇺 RU — Telegram</h2>
+        <p><a href="https://t.me/rainshub" target="_blank">Перейти в Telegram</a></p>
+        <ol>
+          <li>Отправьте <b>/start</b> и выберите язык.</li>
+          <li>Зарегистрируйтесь через реферальную ссылку или код.</li>
+          <li>Нажмите <b>Choose site</b> и привяжите Steam-профиль.</li>
+          <li>После верификации бот пришлёт ссылку на группу.</li>
+        </ol>
+      `,
+      "en-discord": `
+        <h2>🇬🇧 EN — Discord</h2>
+        <p><a href="https://discord.gg/8YB5FCWJ" target="_blank">Join Discord</a></p>
+        <ol>
+          <li>In <b>#welcome</b>, click <b>Register</b>.</li>
+          <li>Select language (<code>/change_language</code>).</li>
+          <li>Register via referral link or code.</li>
+          <li>Use <code>/choose_site</code> to select a site.</li>
+          <li>After ~1 minute bot confirms your account.</li>
+        </ol>
+      `,
+      "en-telegram": `
+        <h2>🇬🇧 EN — Telegram</h2>
+        <p><a href="https://t.me/rainshub" target="_blank">Open Telegram</a></p>
+        <ol>
+          <li>Send <b>/start</b> and choose language.</li>
+          <li>Register via referral link or code.</li>
+          <li>Press <b>Choose site</b>, link Steam profile.</li>
+          <li>After verification bot sends invite link.</li>
+        </ol>
+      `
+    };
 
-    <h3>🔷 Telegram</h3>
-    <p><a href="https://t.me/rainshub" target="_blank">Open Telegram</a></p>
-    <ol>
-      <li>Send <b>/start</b> and choose language.</li>
-      <li>Register via our <b>referral link</b> or enter <b>code</b>.</li>
-      <li>In bot, press <b>Choose site</b>, select site, link Steam profile.</li>
-      <li>After verification, bot sends invite link.</li>
-    </ol>
-    <p><b>Extra settings:</b></p>
-    <ul>
-      <li>Filter notifications (only rains > 500).</li>
-      <li><code>/statistics</code> — linked sites status.</li>
-    </ul>
-  </section>
-
-  <p class="lang">© Alerts Hub 2025</p>
+    function showContent(page) {
+      document.getElementById('content').innerHTML = pages[page];
+    }
+  </script>
 </body>
 </html>
