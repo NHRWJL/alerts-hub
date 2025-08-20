@@ -7,33 +7,60 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      display: flex;
+      background: #f8f8f8;
       height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
+    /* Layout wrapper */
+    .app {
+      display: flex;
+      width: 80%;
+      max-width: 1400px;
+      height: 90vh;
+      background: white;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
     /* Sidebar */
     nav {
-      width: 220px;
+      width: 20%;
       background: #1e1e1e;
       color: #fff;
-      height: 100%;
       padding: 20px;
-      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
     }
     nav h2 {
-      font-size: 18px;
-      margin-top: 20px;
-      margin-bottom: 10px;
+      font-size: 16px;
+      margin: 10px 0;
     }
     nav a {
       display: block;
       color: #ddd;
       text-decoration: none;
-      padding: 5px 0 5px 15px;
+      padding: 6px 0 6px 10px;
       font-size: 14px;
       cursor: pointer;
     }
     nav a:hover {
       color: #fff;
+    }
+    nav button {
+      margin-top: auto;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      background: #444;
+      color: white;
+      cursor: pointer;
+    }
+    nav button:hover {
+      background: #666;
     }
 
     /* Content */
@@ -45,89 +72,136 @@
     main h1, main h2 {
       margin-top: 0;
     }
+
+    /* Language selection */
+    .lang-select {
+      text-align: center;
+    }
+    .lang-select h1 {
+      margin-bottom: 20px;
+    }
+    .lang-select button {
+      margin: 10px;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background: #1e1e1e;
+      color: white;
+    }
+    .lang-select button:hover {
+      background: #444;
+    }
+
+    /* Guides submenu */
+    .submenu {
+      margin-left: 15px;
+    }
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <nav>
-    <h2>Main</h2>
-    <a onclick="showContent('main')">About</a>
+  <!-- Language selection -->
+  <div id="lang-screen" class="lang-select">
+    <h1>Выберите язык / Choose language</h1>
+    <button onclick="setLanguage('ru')">🇷🇺 Русский</button>
+    <button onclick="setLanguage('en')">🇬🇧 English</button>
+  </div>
 
-    <h2>RU</h2>
-    <a onclick="showContent('ru-discord')">Discord</a>
-    <a onclick="showContent('ru-telegram')">Telegram</a>
+  <!-- App layout -->
+  <div id="app" class="app" style="display:none;">
+    <nav>
+      <h2 id="menu-about"></h2>
+      <a onclick="showContent('about')" id="link-about"></a>
+      <a onclick="showContent('discord')" id="link-discord"></a>
+      <a onclick="showContent('telegram')" id="link-telegram"></a>
+      <h2 id="menu-guides"></h2>
+      <div class="submenu">
+        <a onclick="showContent('banditcamp')" id="link-banditcamp"></a>
+        <a onclick="showContent('skinrave')" id="link-skinrave"></a>
+        <a onclick="showContent('placeholder')" id="link-placeholder"></a>
+      </div>
+      <button onclick="changeLanguage()">🌐 <span id="lang-btn"></span></button>
+    </nav>
 
-    <h2>EN</h2>
-    <a onclick="showContent('en-discord')">Discord</a>
-    <a onclick="showContent('en-telegram')">Telegram</a>
-  </nav>
-
-  <!-- Content -->
-  <main id="content">
-    <h1>Alerts Hub</h1>
-    <p>
-      Добро пожаловать в <b>Alerts Hub</b> 🎉  
-      Здесь вы можете подключить уведомления о "рейнах" через <b>Discord</b> или <b>Telegram</b>.  
-      Выберите нужный раздел в меню слева.
-    </p>
-  </main>
+    <main id="content"></main>
+  </div>
 
   <script>
-    const pages = {
-      "main": `
-        <h1>Alerts Hub</h1>
-        <p>
-          Добро пожаловать в <b>Alerts Hub</b> 🎉<br>
-          Здесь вы можете подключить уведомления о "рейнах" через <b>Discord</b> или <b>Telegram</b>.<br>
-          Выберите нужный раздел в меню слева.
-        </p>
-      `,
-      "ru-discord": `
-        <h2>🇷🇺 RU — Discord</h2>
-        <p><a href="https://discord.gg/8YB5FCWJ" target="_blank">Присоединиться в Discord</a></p>
-        <ol>
-          <li>В канале <b>#welcome</b> нажмите <b>Register</b>.</li>
-          <li>Выберите язык (<code>/change_language</code>).</li>
-          <li>Зарегистрируйтесь через реферальную ссылку или код.</li>
-          <li>Введите <code>/choose_site</code> и выберите сайт.</li>
-          <li>Через ~1 минуту бот подтвердит аккаунт.</li>
-        </ol>
-      `,
-      "ru-telegram": `
-        <h2>🇷🇺 RU — Telegram</h2>
-        <p><a href="https://t.me/rainshub" target="_blank">Перейти в Telegram</a></p>
-        <ol>
-          <li>Отправьте <b>/start</b> и выберите язык.</li>
-          <li>Зарегистрируйтесь через реферальную ссылку или код.</li>
-          <li>Нажмите <b>Choose site</b> и привяжите Steam-профиль.</li>
-          <li>После верификации бот пришлёт ссылку на группу.</li>
-        </ol>
-      `,
-      "en-discord": `
-        <h2>🇬🇧 EN — Discord</h2>
-        <p><a href="https://discord.gg/8YB5FCWJ" target="_blank">Join Discord</a></p>
-        <ol>
-          <li>In <b>#welcome</b>, click <b>Register</b>.</li>
-          <li>Select language (<code>/change_language</code>).</li>
-          <li>Register via referral link or code.</li>
-          <li>Use <code>/choose_site</code> to select a site.</li>
-          <li>After ~1 minute bot confirms your account.</li>
-        </ol>
-      `,
-      "en-telegram": `
-        <h2>🇬🇧 EN — Telegram</h2>
-        <p><a href="https://t.me/rainshub" target="_blank">Open Telegram</a></p>
-        <ol>
-          <li>Send <b>/start</b> and choose language.</li>
-          <li>Register via referral link or code.</li>
-          <li>Press <b>Choose site</b>, link Steam profile.</li>
-          <li>After verification bot sends invite link.</li>
-        </ol>
-      `
+    let currentLang = 'ru';
+
+    const texts = {
+      ru: {
+        menu: {
+          about: "О проекте",
+          discord: "Discord",
+          telegram: "Telegram",
+          guides: "Гайды",
+          banditcamp: "BanditCamp",
+          skinrave: "SkinRave",
+          placeholder: "Заглушка",
+          langBtn: "Сменить язык"
+        },
+        pages: {
+          about: "<h1>Alerts Hub</h1><p>Добро пожаловать в <b>Alerts Hub</b> 🎉 Здесь вы можете подключить уведомления о 'рейнах' через Discord или Telegram.</p>",
+          discord: "<h2>Discord</h2><p>Инструкция по подключению Discord на русском.</p>",
+          telegram: "<h2>Telegram</h2><p>Инструкция по подключению Telegram на русском.</p>",
+          banditcamp: "<h2>BanditCamp</h2><p>Гайд по BanditCamp.</p>",
+          skinrave: "<h2>SkinRave</h2><p>Гайд по SkinRave.</p>",
+          placeholder: "<h2>Заглушка</h2><p>Скоро тут будет информация...</p>"
+        }
+      },
+      en: {
+        menu: {
+          about: "About",
+          discord: "Discord",
+          telegram: "Telegram",
+          guides: "Guides",
+          banditcamp: "BanditCamp",
+          skinrave: "SkinRave",
+          placeholder: "Placeholder",
+          langBtn: "Change language"
+        },
+        pages: {
+          about: "<h1>Alerts Hub</h1><p>Welcome to <b>Alerts Hub</b> 🎉 Here you can enable rain alerts via Discord or Telegram.</p>",
+          discord: "<h2>Discord</h2><p>Instructions for connecting Discord in English.</p>",
+          telegram: "<h2>Telegram</h2><p>Instructions for connecting Telegram in English.</p>",
+          banditcamp: "<h2>BanditCamp</h2><p>Guide for BanditCamp.</p>",
+          skinrave: "<h2>SkinRave</h2><p>Guide for SkinRave.</p>",
+          placeholder: "<h2>Placeholder</h2><p>Coming soon...</p>"
+        }
+      }
     };
 
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.getElementById("lang-screen").style.display = "none";
+      document.getElementById("app").style.display = "flex";
+      updateMenu();
+      showContent("about");
+    }
+
+    function changeLanguage() {
+      currentLang = currentLang === "ru" ? "en" : "ru";
+      updateMenu();
+      showContent("about");
+    }
+
+    function updateMenu() {
+      const t = texts[currentLang].menu;
+      document.getElementById("menu-about").innerText = t.about;
+      document.getElementById("link-about").innerText = t.about;
+      document.getElementById("link-discord").innerText = t.discord;
+      document.getElementById("link-telegram").innerText = t.telegram;
+      document.getElementById("menu-guides").innerText = t.guides;
+      document.getElementById("link-banditcamp").innerText = t.banditcamp;
+      document.getElementById("link-skinrave").innerText = t.skinrave;
+      document.getElementById("link-placeholder").innerText = t.placeholder;
+      document.getElementById("lang-btn").innerText = t.langBtn;
+    }
+
     function showContent(page) {
-      document.getElementById('content').innerHTML = pages[page];
+      document.getElementById("content").innerHTML = texts[currentLang].pages[page];
     }
   </script>
 </body>
