@@ -187,8 +187,68 @@
         transform: translateY(-2px);
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
+
+    .menu-toggle {
+        display: none;
+    }
+
+@media (max-width: 768px) {
+
+  .app {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(151, 215, 255, 0.2) 0%, rgba(72, 103, 121, 0.3) 100%);
+        border-radius: 0px;
+        overflow: hidden;
+    }
+  #lang-screen {
+    margin-top: 40%;
+  }
+  nav {
+    position: fixed;
+    top: 7%;
+    left: -100%;
+    width: 33%;
+    height: 100%;
+    border-radius: 0;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+  nav.active {
+    left: 0;
+    font-size: 30px;
+    font-family: 'Regular';
+  }
+  .header {
+    position: sticky;
+    display: flex;
+    width: 100%;
+    height: 7%;
+    background: #2c4658;
+    align-items: center;
+  }
+  body {
+    display: block;
+  }
+
+  .menu-toggle {
+    display: flex;
+    margin-left: 20px;
+    background: #102631;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 1100;
+    }
+}
+</style>
   </style>
 </head>
+<link rel="icon" type="image/png" href="favi.png" sizes="64x64">
 <body>
   <!-- Language selection -->
   <div id="lang-screen">
@@ -216,7 +276,10 @@
     </div>
 
   <!-- App layout -->
-  <div id="app" class="app" style="display:none;">
+   <div id="header" class="header" style="display: none;">
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  </div>
+  <div id="app" class="app" style="display: none;">
     <nav>
       <h2 id="menu-about"></h2>
       <a onclick="showContent('about')" id="link-about"></a>
@@ -271,7 +334,7 @@
                     <h2>Подключение бота | DISCORD</h2>
                     <ol>
                     <li>Присоединитесь к нашему <a href="https://discord.gg/N4VFJ65Dvq" target="_blank" rel="noopener">Серверу</a>.</li>
-                    <li>Нажмите на кнопку <b>"Register"</b> в самом низу сообщения.</li>
+                    <li>Нажмите на кнопку <b>"Register"</b> в самом низу сообщения в канале #welcome</li>
                     <li>Далее вам в ЛС поступит сообщение от бота — следуйте инструкции.</li>
                     </ol>
                     <p><i>*Если вам нужен гайд как подключить тот или иной сайт, воспользуйтесь меню слева.</i></p>
@@ -398,7 +461,7 @@
                     <h2>Bot connection | DISCORD</h2>
                     <ol>
                     <li>Join our <a href="https://discord.gg/N4VFJ65Dvq" target="_blank" rel="noopener">Server</a>.</li>
-                    <li>Click the <b>"Register"</b> button at the bottom of the message.</li>
+                    <li>Click the <b>"Register"</b> button at the bottom of the message in #welcome channel.</li>
                     <li>You will receive a DM from the bot — follow the instructions.</li>
                     </ol>
                     <p><i>*If you need a guide on how to connect a specific site, use the left menu.</i></p>
@@ -495,20 +558,24 @@
     };
 
 
+    function toggleMenu() {
+    document.querySelector("nav").classList.toggle("active");
+    }
 
 
     function setLanguage(lang) {
-            currentLang = lang;
-            document.getElementById("lang-screen").style.display = "none";
-            document.getElementById("app").style.display = "flex";
-            updateMenu();
-            showContent("about");
+        currentLang = lang;
+        document.getElementById("lang-screen").style.display = "none";
+        document.getElementById("app").style.display = "flex";
+        document.getElementById("header").style.display = "flex";
+        updateMenu();
+        showContent("about", true);
     }
 
     function changeLanguage() {
             currentLang = currentLang === "ru" ? "en" : "ru";
             updateMenu();
-            showContent("about");
+            showContent("about", false);
     }
 
     function copyCode(text, el) {
@@ -534,8 +601,11 @@
         document.getElementById("lang-btn").innerText = t.langBtn;
     }
 
-    function showContent(page) {
+    function showContent(page, onload=false) {
         document.getElementById("content").innerHTML = texts[currentLang].pages[page] || "<p>Страница в разработке</p>";
+        if (!onload) {
+            toggleMenu();
+        }
     }
   </script>
 </body>
